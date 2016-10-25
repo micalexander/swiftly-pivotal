@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+APP_ROOT = File.expand_path("../../lib",__FILE__)
+$:.unshift( APP_ROOT )
+
+require 'yaml'
+require 'base/cli'
+
+Base::CLI.start
