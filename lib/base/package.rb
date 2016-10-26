@@ -51,8 +51,10 @@ module SwiftlyPivotal
     #
     # @return [obj] An object of the package
     def self.retrieve type, name
+
       # Gather all packages
       self.gather type
+
       # Check to see if the class variable packages
       # contain packages that match the passed in type
       if !@packages[type].nil?

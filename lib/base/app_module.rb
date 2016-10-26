@@ -15,6 +15,20 @@ end
 module SwiftlyPivotal
   module Helpers
 
+    # def something
+
+    # end
+    # def self.included(base)
+    #   base.extend ClassMethods
+    # end
+
+    # module ClassMethods
+    #   def project_names name = ''
+
+
+    #     # arguments Cli.new
+    #   end
+    # end
 
   end
 end
