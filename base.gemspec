@@ -2,19 +2,20 @@ $:.unshift File.expand_path("../lib", __FILE__)
 require "base/version"
 
 Gem::Specification.new do |s|
-  s.name                      = Base::APP_NAME
-  s.version                   = Base::VERSION
+  s.name                      = SwiftlyPivotal::APP_NAME
+  s.version                   = SwiftlyPivotal::VERSION
   s.platform                  = Gem::Platform::RUBY
-  s.summary                   = "Base summary"
-  s.description               = "Base Description"
+  s.summary                   = "SwiftlyPivotal summary"
+  s.description               = "SwiftlyPivotal Description"
   s.authors                   = ["Mic Alexander"]
   s.email                     = 'mic@micalexander.com'
   s.files                     = Dir['lib/   *.rb']
-  s.executables               = [Base::APP_NAME]
+  s.executables               = [SwiftlyPivotal::APP_NAME]
   s.required_rubygems_version = ">= 2.1.3"
 
   s.add_dependency "thor", "~> 0.19.1"
   s.add_dependency "activesupport", "~> 4.0.1"
+  s.add_dependency "httparty"
   s.add_dependency "awesome_print", "~> 1.6.1"
 
   # The following block of code determines the files that should be included

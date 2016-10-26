@@ -1,13 +1,16 @@
 require 'thor'
+require 'base/version'
+require 'base/tracker'
 require 'base/app_module'
+require 'base/track'
 
-module Base
+module SwiftlyPivotal
   class CLI < Thor
 
     include Thor::Actions
     include Helpers
 
-    register Base::Action,    "action",    "action COMMAND SOMETHING",           "Do something"
+    register SwiftlyPivotal::Track, "track", "track COMMAND type", "Retrieve info about type"
 
   end
 end

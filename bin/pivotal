@@ -6,4 +6,4 @@ $:.unshift( APP_ROOT )
 require 'yaml'
 require 'base/cli'
 
-Base::CLI.start
+SwiftlyPivotal::CLI.start

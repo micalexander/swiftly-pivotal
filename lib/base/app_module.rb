@@ -12,7 +12,7 @@ class String
   end
 end
 
-module Base
+module SwiftlyPivotal
   module Helpers
 
 
