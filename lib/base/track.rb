@@ -53,10 +53,9 @@ module SwiftlyPivotal
 
             # If so loop through the stories
             stories.parsed_response.each do |story|
-              ap story
 
               # Output each story to the terminal
-              say_status "\n   pivotal: ", "#{story['id']} - #{story['name']}\n              #{story['current_state']} - #{Time.iso8601(story['updated_at']).strftime('%B %e,%l:%M %p')}\n              #{story['url']}\n", :yellow
+              say_status "\n   pivotal: ", "#{story['id']}: #{story['name']}\n              Estimated: #{story['estimate']}\n              #{story['current_state'].capitalize}: #{Time.iso8601(story['updated_at']).strftime('%B %e,%l:%M %p')}\n              #{story['url']}\n", :yellow
             end
           end
         end
