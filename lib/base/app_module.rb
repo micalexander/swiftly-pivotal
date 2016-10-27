@@ -54,7 +54,6 @@ module SwiftlyPivotal
 
       # Set the initial allowed answers
       allowed = ['y', '1', '2', '3', '4', '5']
-      puts items.inspect
 
       # Ask a question and as long as the answers to the question are allowed
       while answer = thor.ask(thor.set_color(directions_messaage, :yellow, :bold ),  :limited_to => allowed)
@@ -101,8 +100,7 @@ module SwiftlyPivotal
     def self.expand_selection expandable_name, ids, answer
 
       answer = answer -1
-
-      items = SwiftlyPivotal::PivotalTracker.send expandable_name, 0, ids[answer]
+      items = SwiftlyPivotal::PivotalTracker.send expandable_name, ids[answer]
 
       SwiftlyPivotal::Format.send expandable_name, items
 

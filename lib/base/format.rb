@@ -11,7 +11,7 @@ module SwiftlyPivotal
     def self.project project
 
       # Check to see if a project was passed in
-      if project.parsed_response
+      if !project.include? 'Message'
 
         # If so, send project to get rendered to the screen
         self.render_hash({
@@ -23,6 +23,10 @@ module SwiftlyPivotal
           'Created'   => Time.iso8601(project.parsed_response['created_at']).strftime('%B %e,%l:%M %p'),
           'Updated'   => Time.iso8601(project.parsed_response['updated_at']).strftime('%B %e,%l:%M %p'),
         })
+      else
+        # If so, send story to get rendered to the screen
+        self.render_hash(project, false)
+        abort
       end
     end
 
@@ -37,7 +41,7 @@ module SwiftlyPivotal
       # Check to see if any stories were passed in
       if !stories.include? 'Message'
 
-        stories.parsed_response.each do |story|
+        stories.each do |story|
 
           # If so, send story to get rendered to the screen
           self.render_hash({
@@ -50,11 +54,10 @@ module SwiftlyPivotal
             'URL'       => story['url']
           })
         end
-
       else
-          # If so, send story to get rendered to the screen
-          self.render_hash(stories, false)
-          abort
+        # If so, send story to get rendered to the screen
+        self.render_hash(stories, false)
+        abort
       end
     end
 
@@ -66,9 +69,9 @@ module SwiftlyPivotal
     # @return [void]
     def self.tasks tasks, number = 0
 
-      if tasks.parsed_response.length > 0
+      if !tasks.include? 'Message'
 
-        tasks.parsed_response.each do |task|
+        tasks.each do |task|
 
           # If so, send task to get rendered to the screen
           self.render_hash({
@@ -79,10 +82,12 @@ module SwiftlyPivotal
             'Updated'     => Time.iso8601(task['updated_at']).strftime('%B %e,%l:%M %p'),
           })
         end
+      else
+        # If so, send story to get rendered to the screen
+        self.render_hash(tasks, false)
+        abort
       end
     end
-
-
 
     #
     # Render a has to the screen formatted nicely

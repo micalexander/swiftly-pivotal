@@ -24,27 +24,25 @@ module SwiftlyPivotal
 
     def self.projects
 
-      self.attempt_resource 'projects', '', "/services/v5/projects"
+      self.attempt_resource 'projects', "/services/v5/projects"
     end
 
     def self.project
 
-      self.attempt_resource 'project', '', "/services/v5/projects/#{project_settings.id}"
+      self.attempt_resource 'project', "/services/v5/projects/#{project_settings.id}"
     end
 
     def self.stories offset = 0, state = ''
 
       with_state = "&with_state=#{state}" unless state == ''
 
-      self.attempt_resource 'stories', state, "/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}"
+      self.attempt_resource 'stories', "/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}", state
 
     end
 
-    def self.tasks story_id, offset = 0, state = ''
+    def self.tasks story_id
 
-      with_state = "?with_state=#{state}" unless state == ''
-
-      self.attempt_resource 'tasks', state, "/services/v5/projects/#{project_settings.id}/stories/#{story_id}/tasks?limit=5&offset=#{offset}#{with_state}"
+      self.attempt_resource 'tasks', "/services/v5/projects/#{project_settings.id}/stories/#{story_id}/tasks"
     end
 
 
@@ -54,7 +52,7 @@ module SwiftlyPivotal
     # @param path [string] path to resourse in api call
     #
     # @return [type] [description]
-    def self.attempt_resource resource, state, path
+    def self.attempt_resource resource, path, state = ''
 
       with_state = " #{state} " unless state == ''
 
@@ -89,7 +87,7 @@ module SwiftlyPivotal
         when '1'
 
           # Store errors to usable variables
-          error   = parsed_response['code'].gsub('_',' ').capitalizeerror
+          error   = parsed_response['code'].gsub('_',' ').capitalize
           message = parsed_response['error']
 
         when '2'
