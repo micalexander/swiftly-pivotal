@@ -10,7 +10,7 @@ module SwiftlyPivotal
     base_uri 'https://www.pivotaltracker.com'
 
 
-    def self.config
+    def self.project_settings
 
       SwiftlyPivotal::Tracker.retrieve :pivotal, $project_name
     end
@@ -22,12 +22,14 @@ module SwiftlyPivotal
 
     def self.project
 
-      self.get("/services/v5/projects/#{config.id}")
+      self.get("/services/v5/projects/#{project_settings.id}")
     end
 
-    def self.stories offset = 0
+    def self.stories offset = 0, with_state = ''
 
-      self.get("/services/v5/projects/#{config.id}/stories?limit=5&offset=#{offset}")
+      with_state = "&with_state=#{with_state}" unless with_state == ''
+
+      self.get("/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}")
     end
 
   end
