@@ -6,13 +6,20 @@ module SwiftlyPivotal
     include Helpers
     include HTTParty
 
-    headers 'X-TrackerToken' => '847d6b5ff008a5d79a5367fb3cc1b876'
-    base_uri 'https://www.pivotaltracker.com'
-
 
     def self.project_settings
 
-      SwiftlyPivotal::Tracker.retrieve :pivotal, $project_name
+      # Retrieve the project setting from the config file
+      project_settings = SwiftlyPivotal::Tracker.retrieve :pivotal, $project_name
+
+      # Set headers
+      headers 'X-TrackerToken' => project_settings.token
+
+      # Set the base uri
+      base_uri 'https://www.pivotaltracker.com'
+
+      # Return the project settings
+      project_settings
     end
 
     def self.projects
