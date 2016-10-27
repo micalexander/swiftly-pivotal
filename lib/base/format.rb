@@ -53,6 +53,30 @@ module SwiftlyPivotal
       end
     end
 
+    #
+    # Filter tasks before sending it to be rendered
+    # @param tasks [hash] Hash of stories
+    # @param number = 0 [int] Number of the tasks as a counter
+    #
+    # @return [void]
+    def self.tasks tasks, number = 0
+
+      if tasks
+
+        tasks.each do |task|
+
+          # If so, send task to get rendered to the screen
+          self.render_hash({
+            '#'           => number = number+1,
+            'ID'          => task['id'],
+            'Description' => task['description'],
+            'Complete'    => task['complete'],
+            'Updated'     => Time.iso8601(task['updated_at']).strftime('%B %e,%l:%M %p'),
+          })
+        end
+      end
+
+    end
 
     #
     # Render a has to the screen formatted nicely

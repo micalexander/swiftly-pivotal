@@ -36,8 +36,18 @@ module SwiftlyPivotal
         # Start the loaded at zero
         loaded = 0
 
+        # Create an array to stor story ids
+        story_ids = []
+
         # Set the initial allowed answers
         allowed = ['y', '1', '2', '3', '4', '5']
+
+        # Create a map of stores associated by number
+        stories.each do |story|
+
+          story_ids << story['id']
+        end
+
 
         # Ask a question and as long as the answers to the question are allowed
         while answer = thor.ask(thor.set_color('Load 5 more or enter number to expand', :yellow, :bold ),  :limited_to => allowed)
@@ -55,22 +65,40 @@ module SwiftlyPivotal
             allowed << stories.length + (number+1)
           end
 
-          # Format the retrieved stories
-          SwiftlyPivotal::Format.stories stories, loaded
-
-          # Jump out of this loop if there are no more stories
-          break unless stories.length > 4
-
           # Check to see if a number was passed
           if answer.to_i  > 0
 
             # If so, do something with it and break out of this loop
-            break
+            self.expand_story story_ids, answer.to_i
 
+            break
           end
+
+          # Format the retrieved stories
+          SwiftlyPivotal::Format.stories stories, loaded
+
+          # Create a map of stores associated by number
+          stories.each do |story|
+
+            story_ids << story['id']
+          end
+
+
+          # Jump out of this loop if there are no more stories
+          break unless stories.length > 4
         end
 
         thor.say 'No more stories'
+
+      end
+
+      def self.expand_story story_ids, answer
+
+        answer = answer -1
+
+        tasks = SwiftlyPivotal::PivotalTracker.tasks story_ids[answer]
+
+        SwiftlyPivotal::Format.tasks tasks
 
       end
 
