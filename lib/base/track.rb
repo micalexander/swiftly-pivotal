@@ -28,6 +28,8 @@ module SwiftlyPivotal
 
       stories = SwiftlyPivotal::PivotalTracker.stories
 
+      SwiftlyPivotal::Format.stories stories
+
     end
   end
 end

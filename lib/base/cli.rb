@@ -5,6 +5,7 @@ require "time"
 require 'base/version'
 require 'base/app_module'
 require 'base/pivotal'
+require 'base/format'
 require 'base/tracker'
 require 'base/track'
 

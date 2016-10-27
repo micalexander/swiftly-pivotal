@@ -25,10 +25,9 @@ module SwiftlyPivotal
       self.get("/services/v5/projects/#{config.id}")
     end
 
-    def self.stories
+    def self.stories offset = 0
 
-
-      self.get("/services/v5/projects/#{config.id}/stories")
+      self.get("/services/v5/projects/#{config.id}/stories?limit=5&offset=#{offset}")
     end
 
   end
