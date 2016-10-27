@@ -38,10 +38,10 @@ module SwiftlyPivotal
       loaded = 0
 
       # Go out and get 5 stories
-      items = SwiftlyPivotal::PivotalTracker.send(items_name, loaded, state)
+      items = SwiftlyPivotal::PivotalTracker.send items_name, loaded, state
 
       # Format the retrieved stories
-      SwiftlyPivotal::Format.send(items_name, items, loaded)
+      SwiftlyPivotal::Format.send items_name, items, loaded
 
       # Create an array to store items ids
       item_ids = []

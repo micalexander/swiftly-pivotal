@@ -11,17 +11,17 @@ module SwiftlyPivotal
     def self.project project
 
       # Check to see if a project was passed in
-      if project
+      if project.parsed_response
 
         # If so, send project to get rendered to the screen
         self.render_hash({
           '#'         => 1,
-          'ID'        => project['id'],
-          'Name'      => project['name'],
-          'Points'    => project['point_scale'],
-          'Velocity'  => project['velocity_averaged_over'],
-          'Created'   => Time.iso8601(project['created_at']).strftime('%B %e,%l:%M %p'),
-          'Updated'   => Time.iso8601(project['updated_at']).strftime('%B %e,%l:%M %p'),
+          'ID'        => project.parsed_response['id'],
+          'Name'      => project.parsed_response['name'],
+          'Points'    => project.parsed_response['point_scale'],
+          'Velocity'  => project.parsed_response['velocity_averaged_over'],
+          'Created'   => Time.iso8601(project.parsed_response['created_at']).strftime('%B %e,%l:%M %p'),
+          'Updated'   => Time.iso8601(project.parsed_response['updated_at']).strftime('%B %e,%l:%M %p'),
         })
       end
     end
@@ -33,11 +33,12 @@ module SwiftlyPivotal
     #
     # @return [void]
     def self.stories stories, number = 0
-
+      # puts stories.parsed_response
+      # exit
       # Check to see if any stories were passed in
-      if stories
+      if !stories.include? 'Error'
 
-        stories.each do |story|
+        stories.parsed_response.each do |story|
 
           # If so, send story to get rendered to the screen
           self.render_hash({
@@ -50,6 +51,11 @@ module SwiftlyPivotal
             'URL'       => story['url']
           })
         end
+
+      else
+          # If so, send story to get rendered to the screen
+          self.render_hash(stories, false)
+          abort
       end
     end
 
@@ -61,9 +67,9 @@ module SwiftlyPivotal
     # @return [void]
     def self.tasks tasks, number = 0
 
-      if tasks
+      if tasks.parsed_response.length > 0
 
-        tasks.each do |task|
+        tasks.parsed_response.each do |task|
 
           # If so, send task to get rendered to the screen
           self.render_hash({
@@ -75,8 +81,9 @@ module SwiftlyPivotal
           })
         end
       end
-
     end
+
+
 
     #
     # Render a has to the screen formatted nicely
@@ -84,7 +91,7 @@ module SwiftlyPivotal
     # @param number = 0 [int] [description]
     #
     # @return [echo] Renders to the screen
-    def self.render_hash message
+    def self.render_hash message, use_numbers = true
 
       # Instantiate Thor
       thor     = Thor.new
@@ -100,7 +107,7 @@ module SwiftlyPivotal
       message.each do |k, v|
 
         # Check to see if the number has been displayed
-        if !numbered
+        if !numbered && use_numbers
 
           # If not, set first line to blue and output it
           thor.say thor.set_color("\t#{k.rjust(11)}#{v}", :blue, :bold )
