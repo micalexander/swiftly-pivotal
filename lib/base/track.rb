@@ -9,7 +9,7 @@ module SwiftlyPivotal
       $project_name = args[0][0]
     end
 
-    desc "track project PROJECT_NAME", "Track Project"
+    desc "project PROJECT_NAME", "Track Project"
 
     def project( project_name )
 
@@ -21,7 +21,30 @@ module SwiftlyPivotal
 
     end
 
-    register SwiftlyPivotal::Unscheduled, "unscheduled", "unscheduled PROJECT_NAME", "Retrieve info about type"
+    desc "unscheduled PROJECT_NAME", "Track unscheduled"
+
+    #
+    # Get the unscheduled stories associated with the project name
+    # @param project_name [string] The name of the pivotal tracker project
+    #
+    # @return [void]
+    def unscheduled( project_name )
+
+      SwiftlyPivotal::Stories.get_stories 'unscheduled'
+    end
+
+    desc "finished PROJECT_NAME", "Track finished"
+
+    #
+    # Get the finished stories associated with the project name
+    # @param project_name [string] The name of the pivotal tracker project
+    #
+    # @return [void]
+    def finished( project_name )
+
+      SwiftlyPivotal::Stories.get_stories 'finished'
+    end
+
     register SwiftlyPivotal::Stories, "stories", "stories PROJECT_NAME", "Retrieve info about [project_name]"
 
   end

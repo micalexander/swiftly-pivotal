@@ -25,11 +25,11 @@ module SwiftlyPivotal
       self.get("/services/v5/projects/#{project_settings.id}")
     end
 
-    def self.stories offset = 0, with_state = ''
+    def self.stories offset = 0, state = ''
 
-      with_state = "&with_state=#{with_state}" unless with_state == ''
+      state = "&with_state=#{state}" unless state == ''
 
-      self.get("/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}")
+      self.get("/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{state}")
     end
 
   end

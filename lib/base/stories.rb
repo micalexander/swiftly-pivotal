@@ -18,50 +18,62 @@ module SwiftlyPivotal
     # @return [void]
     def stories( project_name )
 
-      # Go out and get 5 stories
-      stories = SwiftlyPivotal::PivotalTracker.stories
+      SwiftlyPivotal::Stories.get_stories
+    end
 
-      # Format the retrieved stories
-      SwiftlyPivotal::Format.stories stories
+    no_commands do
 
-      # Start the loaded at zero
-      loaded = 0
+      def self.get_stories state = ''
 
-      # Set the initial allowed answers
-      allowed = ['y', '1', '2', '3', '4', '5']
+        thor = Thor.new
 
-      # Ask a question and as long as the answers to the question are allowed
-      while answer = ask(set_color('Load 5 more or enter number to expand', :yellow, :bold ),  :limited_to => allowed)
-
-        # Increment the loaded by 5
-        loaded = loaded + 5
-
-        # Go out and get 5 more stories
-        stories = SwiftlyPivotal::PivotalTracker.stories loaded
-
-        # Loop throut the loaded numbers
-        loaded.times do |number|
-
-          # Add them to the allowed array
-          allowed << stories.length + (number+1)
-        end
+        # Go out and get 5 stories
+        stories = SwiftlyPivotal::PivotalTracker.stories 0, state
 
         # Format the retrieved stories
-        SwiftlyPivotal::Format.stories stories, loaded
+        SwiftlyPivotal::Format.stories stories
 
-        # Jump out of this loop if there are no more stories
-        break unless stories.length > 4
+        # Start the loaded at zero
+        loaded = 0
 
-        # Check to see if a number was passed
-        if answer.to_i  > 0
+        # Set the initial allowed answers
+        allowed = ['y', '1', '2', '3', '4', '5']
 
-          # If so, do something with it and break out of this loop
-          break
+        # Ask a question and as long as the answers to the question are allowed
+        while answer = thor.ask(thor.set_color('Load 5 more or enter number to expand', :yellow, :bold ),  :limited_to => allowed)
 
+          # Increment the loaded by 5
+          loaded = loaded + 5
+
+          # Go out and get 5 more stories
+          stories = SwiftlyPivotal::PivotalTracker.stories loaded, state
+
+          # Loop throut the loaded numbers
+          loaded.times do |number|
+
+            # Add them to the allowed array
+            allowed << stories.length + (number+1)
+          end
+
+          # Format the retrieved stories
+          SwiftlyPivotal::Format.stories stories, loaded
+
+          # Jump out of this loop if there are no more stories
+          break unless stories.length > 4
+
+          # Check to see if a number was passed
+          if answer.to_i  > 0
+
+            # If so, do something with it and break out of this loop
+            break
+
+          end
         end
+
+        thor.say 'No more stories'
+
       end
 
-      say 'No more stories'
     end
 
     default_task :stories
