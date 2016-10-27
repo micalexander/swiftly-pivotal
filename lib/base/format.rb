@@ -33,10 +33,9 @@ module SwiftlyPivotal
     #
     # @return [void]
     def self.stories stories, number = 0
-      # puts stories.parsed_response
-      # exit
+
       # Check to see if any stories were passed in
-      if !stories.include? 'Error'
+      if !stories.include? 'Message'
 
         stories.parsed_response.each do |story|
 
