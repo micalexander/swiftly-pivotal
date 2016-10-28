@@ -29,6 +29,26 @@ module SwiftlyPivotal
     #     # arguments Cli.new
     #   end
     # end
+    def self.register_signal_handlers
+
+      thor = Thor.new
+
+      %w(INT HUP TERM QUIT).each do |sig|
+        next unless Signal.list[sig]
+
+        Signal.trap(sig) do
+
+          # Do as little work as possible in the signal context
+          thor.say
+          thor.say
+          thor.say_status "#{APP_NAME}", 'Exiting...', :yellow
+          abort
+
+        end
+      end
+    end
+
+    self.register_signal_handlers
 
     def self.paginate items_name, expandable_name, directions_messaage, non_found_message = 'No more items', state = ''
 

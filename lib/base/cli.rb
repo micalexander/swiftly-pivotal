@@ -14,6 +14,7 @@ module SwiftlyPivotal
   class CLI < Thor
 
     include Thor::Actions
+    include Helpers
 
     register SwiftlyPivotal::Track, "track", "track COMMAND type", "Retrieve info about type"
 
