@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.executables               = [SwiftlyPivotal::APP_NAME]
   s.required_rubygems_version = ">= 2.1.3"
 
+  s.add_dependency "git", "~> 1.2.6"
   s.add_dependency "thor", "~> 0.19.1"
   s.add_dependency "activesupport", "~> 4.0.1"
   s.add_dependency "httparty"
