@@ -1,0 +1,8 @@
+set :tracker, :type => :pivotal do
+
+  name 'TestProject'
+  token '55555555555'
+  id '5555555'
+  location '.'
+
+end

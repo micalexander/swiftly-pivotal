@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency "thor", "~> 0.19.1"
   s.add_dependency "activesupport", "~> 4.0.1"
   s.add_dependency "httparty"
+  s.add_dependency "webmock"
   s.add_dependency "awesome_print", "~> 1.6.1"
 
   # The following block of code determines the files that should be included

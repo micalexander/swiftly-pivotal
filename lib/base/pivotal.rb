@@ -30,6 +30,7 @@ module SwiftlyPivotal
     def self.project
 
       self.attempt_resource 'project', "/services/v5/projects/#{project_settings.id}"
+
     end
 
     def self.stories offset = 0, state = ''
@@ -44,7 +45,6 @@ module SwiftlyPivotal
 
       self.attempt_resource 'tasks', "/services/v5/projects/#{project_settings.id}/stories/#{story_id}/tasks"
     end
-
 
     #
     # Attempt to get resourse

@@ -16,12 +16,12 @@ module SwiftlyPivotal
         # If so, send project to get rendered to the screen
         self.render_hash({
           '#'         => 1,
-          'ID'        => project.parsed_response['id'],
-          'Name'      => project.parsed_response['name'],
-          'Points'    => project.parsed_response['point_scale'],
-          'Velocity'  => project.parsed_response['velocity_averaged_over'],
-          'Created'   => Time.iso8601(project.parsed_response['created_at']).strftime('%B %e,%l:%M %p'),
-          'Updated'   => Time.iso8601(project.parsed_response['updated_at']).strftime('%B %e,%l:%M %p'),
+          'ID'        => project['id'],
+          'Name'      => project['name'],
+          'Points'    => project['point_scale'],
+          'Velocity'  => project['velocity_averaged_over'],
+          'Created'   => Time.iso8601(project['created_at']).strftime('%B %e,%l:%M %p'),
+          'Updated'   => Time.iso8601(project['updated_at']).strftime('%B %e,%l:%M %p'),
         })
       else
         # If so, send story to get rendered to the screen

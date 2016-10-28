@@ -8,7 +8,15 @@ module SwiftlyPivotal
 
     def self.file
 
-      File.join('.', "#{APP_NAME}file",) unless !File.exists?(File.join('.', "#{APP_NAME}file") )
+      if $testing
+
+        file = 'testfile'
+      else
+
+        file = "#{APP_NAME}file"
+      end
+
+      File.join('.', file,) unless !File.exists?(File.join('.', file) )
 
     end
 
