@@ -41,9 +41,15 @@ module SwiftlyPivotal
 
     end
 
-    def self.tasks story_id
+    def self.put_task task, story
 
-      self.attempt_resource 'tasks', "/services/v5/projects/#{project_settings.id}/stories/#{story_id}/tasks"
+      self.put("/services/v5/projects/#{project_settings.id}/stories/#{story['id']}/tasks/#{task['id']}?complete=#{!task['complete']}")
+
+    end
+
+    def self.tasks story
+
+      self.attempt_resource 'tasks', "/services/v5/projects/#{project_settings.id}/stories/#{story['id']}/tasks"
     end
 
     #
@@ -58,6 +64,7 @@ module SwiftlyPivotal
 
       # Error handling with begin and rescue
       begin
+
 
         # Make the api call
         response = self.get(path)
@@ -91,9 +98,8 @@ module SwiftlyPivotal
           message = parsed_response['error']
 
         when '2'
-
           # Create a message for empty resources
-          message = "Could not find #{with_state} #{resource}"
+          message = "Couldn't find any #{with_state} #{resource}"
         end
 
         # Set response back to an empty hash
@@ -106,9 +112,10 @@ module SwiftlyPivotal
           parsed_response['Error'] = error
         end
 
+        parsed_response['Name'] = $project_name.capitalize
 
         # Provide the project id
-        parsed_response['Project ID'] = project_settings.id
+        parsed_response['ID'] = project_settings.id
 
         # Check to see if the state was requested
         if state != ''
@@ -118,7 +125,7 @@ module SwiftlyPivotal
         end
 
         # Provide a somewhat formatted message
-        parsed_response['Message'] = message.to_s.gsub('  ', ' ').gsub('. ', ".\n\t\t\s\s\s\s").gsub(', ', ",\n\t\t\s\s\s\s")
+        parsed_response['Sorry'] = message.to_s.gsub('  ', ' ').gsub('. ', ".\n\t\t\s\s\s\s").gsub(', ', ",\n\t\t\s\s\s\s")
 
       end
 

@@ -25,7 +25,7 @@ module SwiftlyPivotal
 
       def self.get_stories state = ''
 
-        SwiftlyPivotal::Helpers.paginate 'stories', 'tasks', 'Load 5 more or enter number to expand', '', state
+        SwiftlyPivotal::Helpers.paginate 'stories', 'tasks', '', state
 
       end
 
