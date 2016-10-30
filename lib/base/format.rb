@@ -58,6 +58,7 @@ module SwiftlyPivotal
             '#'         => number = number+1,
             'ID'        => story['id'],
             'Name'      => story['name'],
+            'Tasks'     => story['tasks'].length,
             'Estimated' => story.include?('estimate') ? story['estimate'] : 'Not Estimated',
             'Currently' => story['current_state'].capitalize,
             'Updated'   => Time.iso8601(story['updated_at']).strftime('%B %e,%l:%M %p'),
