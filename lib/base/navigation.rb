@@ -180,7 +180,7 @@ module SwiftlyPivotal
 
           if item['tasks'][item_index]['complete'] == false
 
-            clip << "[##{item['id']}] \n#{item['tasks'][item_index]['description']}"
+            clip << "git commit -m '[##{item['id']}] #{item['tasks'][item_index]['description']}'"
 
           end
 
@@ -202,7 +202,7 @@ module SwiftlyPivotal
           elsif ['a', 'd', 'f'].include?(answer)
 
             # If answer is finish, deliver, accepted
-            clip << "git commit -m '[##{item['id']}] \n#{item['name']}'"
+            clip << "git commit -m '[##{item['id']}] #{item['name']}'"
           end
 
           # Check to see if the answer is unschedule
