@@ -170,11 +170,19 @@ module SwiftlyPivotal
         # Quit the app if q is pressed
         Helpers.quit_app if answer == 'q'
 
+        clip = ""
+
         # Capture the item selected
         item_index = self.item_index(answer) unless !item_index(answer)
 
         # Check to see if a number was passed
-        if item_index
+        if item_index && !allowed_selections[:selected].include?(answer)
+
+          if item['tasks'][item_index]['complete'] == false
+
+            clip << "[##{item['id']}] \n#{item['tasks'][item_index]['description']}"
+
+          end
 
           # If so, update the sub item that corresponds with the number entered
           task = SwiftlyPivotal::PivotalTracker.put_task item['tasks'][item_index]
@@ -186,6 +194,16 @@ module SwiftlyPivotal
           SwiftlyPivotal::Format.send items_name, item, 0, false
 
         else
+
+          if answer == 's'
+            # If answer is start
+            clip << "git branch #{item['story_type']}[##{item['id']}]"
+
+          elsif ['a', 'd', 'f'].include?(answer)
+
+            # If answer is finish, deliver, accepted
+            clip << "git commit -m '[##{item['id']}] \n#{item['name']}'"
+          end
 
           # Check to see if the answer is unschedule
           if answer == 'c'
@@ -210,6 +228,9 @@ module SwiftlyPivotal
           # Format the retieved items
           SwiftlyPivotal::Format.send items_name, item, 0, false
         end
+
+        puts 'Copied "'+clip+'" to clipboard!' unless clip == ''
+        Clipboard.copy(clip) unless clip == ''
 
       end
     end

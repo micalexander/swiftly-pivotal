@@ -2,6 +2,7 @@ require 'thor'
 require 'fileutils'
 require 'awesome_print'
 require "time"
+require "clipboard"
 require 'base/version'
 require 'base/app_module'
 require 'base/pivotal'
