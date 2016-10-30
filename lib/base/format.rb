@@ -98,7 +98,7 @@ module SwiftlyPivotal
 
       else
 
-        self.render_heading 'tasks', story['name']
+        self.render_heading 'tasks', story
 
         # If so, send story to get rendered to the screen
         self.render_hash(tasks, false)
@@ -140,15 +140,21 @@ module SwiftlyPivotal
       when 'tasks'
 
         # Calculate the padding
-        sub_heading   = "\s\s\s\s\e[4mStory:\e[0m"
-        tasks_heading = "\s\s\s\s\e[4mTasks:\e[0m"
-
+        sub_heading    = "\s\s\s\s\e[4mStory:\e[0m"
+        tasks_heading  = "\s\s\s\s\e[4mTasks:\e[0m"
+        status_heading = "\s\s\s\s\e[4mStatus:\e[0m"
+        id_heading     = "\s\s\s\s\e[4mId:\e[0m"
 
         # Let the user know the current status of stories we are looking at
         thor.say
         thor.say thor.set_color(sub_heading, :blue )
+        thor.say self.reformat_wrapped meta['name'].capitalize
         thor.say
-        thor.say self.reformat_wrapped meta.capitalize
+        thor.say thor.set_color(status_heading, :blue )
+        thor.say self.reformat_wrapped meta['current_state'].capitalize
+        thor.say
+        thor.say thor.set_color(id_heading, :blue )
+        thor.say self.reformat_wrapped "##{meta['id'].to_s}"
         thor.say
         thor.say thor.set_color(tasks_heading, :blue )
 
