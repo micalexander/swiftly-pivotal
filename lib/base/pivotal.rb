@@ -41,6 +41,12 @@ module SwiftlyPivotal
 
     end
 
+    def self.put_story story, status
+
+      self.put("/services/v5/projects/#{project_settings.id}/stories/#{story['id']}?current_state=#{status}")
+
+    end
+
     def self.put_task task, story
 
       self.put("/services/v5/projects/#{project_settings.id}/stories/#{story['id']}/tasks/#{task['id']}?complete=#{!task['complete']}")

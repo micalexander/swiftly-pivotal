@@ -82,7 +82,7 @@ module SwiftlyPivotal
 
       if !tasks.include? 'Sorry'
 
-        self.render_heading 'tasks', story['name']
+        self.render_heading 'tasks', story
 
         tasks.each do |task|
 
