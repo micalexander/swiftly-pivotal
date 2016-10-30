@@ -25,7 +25,16 @@ module SwiftlyPivotal
 
       def self.get_stories state = ''
 
-        SwiftlyPivotal::Helpers.paginate 'stories', 'tasks', '', state
+        # Start the loaded at zero
+        loaded = 0
+
+        # Go out and get 5 stories
+        stories = SwiftlyPivotal::PivotalTracker.stories 0, state
+
+        # Format the retrieved stories
+        SwiftlyPivotal::Format.stories stories, state, 0
+
+        SwiftlyPivotal::Navigation.navigate 'stories', 'tasks', stories, state
 
       end
 

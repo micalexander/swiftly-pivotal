@@ -65,7 +65,6 @@ module SwiftlyPivotal
       # Error handling with begin and rescue
       begin
 
-
         # Make the api call
         response = self.get(path)
 
