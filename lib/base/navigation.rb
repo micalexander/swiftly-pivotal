@@ -117,10 +117,10 @@ module SwiftlyPivotal
     def self.get_selected selected_name, item
 
       # Go out and get sub items
-      items = SwiftlyPivotal::PivotalTracker.send selected_name, item
+      # items = SwiftlyPivotal::PivotalTracker.send selected_name, item
 
       # Format the retrieved sub items
-      SwiftlyPivotal::Format.send selected_name, items, item, 0, false
+      SwiftlyPivotal::Format.send selected_name, item, 0, false
 
       # Start=blue Accepted=green Deliver=orange f=Finish Rejected=red Unstarted=white Unschedule=white
       #
@@ -140,10 +140,10 @@ module SwiftlyPivotal
       }
 
       # Check to see if we have any sub items
-      if !items.include?('Sorry')
+      if !item['tasks'].empty?
 
         # If we do then loop through them
-        items.length.times do |number|
+        item['tasks'].length.times do |number|
 
           # And add the index to the allowed selections
           allowed_selections[:fetched] << (number+1).to_s
@@ -151,7 +151,7 @@ module SwiftlyPivotal
       end
 
       # Display the selected item
-      self.display_selection allowed_selections, selected_name, items, item
+      self.display_selection allowed_selections, selected_name, item
     end
 
     #
@@ -162,13 +162,13 @@ module SwiftlyPivotal
     # @param item [hash] Item hash
     #
     # @return [type] [description]
-    def self.display_selection allowed_selections, items_name, items, item
+    def self.display_selection allowed_selections, items_name, item
 
       # Begin the loop to retrieve answers from the user
       while answer = self.question(allowed_selections, "\n\nEnter a number to select a #{items_name}")
 
         # Quit the app if q is pressed
-        self.quit_app if answer == 'q'
+        Helpers.quit_app if answer == 'q'
 
         # Capture the item selected
         item_index = self.item_index(answer) unless !item_index(answer)
@@ -177,13 +177,13 @@ module SwiftlyPivotal
         if item_index
 
           # If so, update the sub item that corresponds with the number entered
-          SwiftlyPivotal::PivotalTracker.put_task items[item_index], item
+          task = SwiftlyPivotal::PivotalTracker.put_task item['tasks'][item_index]
 
-          # Go and get the item selected
-          items = SwiftlyPivotal::PivotalTracker.send items_name, item
+          # add the updated task back to the story
+          item['tasks'][item_index] = task
 
           # Format the retieved items
-          SwiftlyPivotal::Format.send items_name, [items[item_index]], item, 0, false
+          SwiftlyPivotal::Format.send items_name, item, 0, false
 
         else
 
@@ -198,11 +198,17 @@ module SwiftlyPivotal
             suffix = 'ed'
           end
 
+          # Cache tasks
+          tasks = item['tasks']
+
           # Return the updated story
           item = SwiftlyPivotal::PivotalTracker.put_story item, "#{allowed_selections[:selected][answer]}#{suffix}".downcase
 
+          # Add tasks back to the story
+          item['tasks'] = tasks
+
           # Format the retieved items
-          SwiftlyPivotal::Format.send items_name, items, item, 0, false
+          SwiftlyPivotal::Format.send items_name, item, 0, false
         end
 
       end

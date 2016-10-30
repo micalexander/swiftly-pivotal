@@ -31,36 +31,12 @@ module SwiftlyPivotal
         # Go out and get 5 stories
         stories = SwiftlyPivotal::PivotalTracker.stories 0, state
 
-        # Check to see if we recieved any stories
-        if !stories.include?('Sorry')
-
-          # Loop through all of the stories
-          stories.each_with_index do |(k,v), i|
-
-            # See if there are any tasks for each story
-            tasks = SwiftlyPivotal::PivotalTracker.tasks stories[i]
-
-            # Check to see if we recieved any tasks
-            if !tasks.include?('Sorry')
-
-              # If so store the tasks
-              # in the stories hash
-              stories[i]['tasks'] = tasks
-            else
-
-              # If not store an empty array
-              stories[i]['tasks'] = []
-            end
-          end
-        end
-
         # Format the retrieved stories
         SwiftlyPivotal::Format.stories stories, state, 0
 
         SwiftlyPivotal::Navigation.navigate 'stories', 'tasks', stories, state
 
       end
-
     end
 
     default_task :stories

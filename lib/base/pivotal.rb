@@ -37,8 +37,32 @@ module SwiftlyPivotal
 
       with_state = "&with_state=#{state}" unless state == ''
 
-      self.attempt_resource 'stories', "/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}", state
+      stories = self.attempt_resource 'stories', "/services/v5/projects/#{project_settings.id}/stories?limit=5&offset=#{offset}#{with_state}", state
 
+      # Check to see if we recieved any stories
+      if !stories.include?('Sorry')
+
+        # Loop through all of the stories
+        stories.each_with_index do |(k,v), i|
+
+          # See if there are any tasks for each story
+          tasks = self.tasks stories[i]
+
+          # Check to see if we recieved any tasks
+          if !tasks.include?('Sorry')
+
+            # If so store the tasks
+            # in the stories hash
+            stories[i]['tasks'] = tasks
+          else
+
+            # If not store an empty array
+            stories[i]['tasks'] = []
+          end
+        end
+      end
+
+      stories
     end
 
     def self.put_story story, status
@@ -47,9 +71,9 @@ module SwiftlyPivotal
 
     end
 
-    def self.put_task task, story
+    def self.put_task task
 
-      self.put("/services/v5/projects/#{project_settings.id}/stories/#{story['id']}/tasks/#{task['id']}?complete=#{!task['complete']}")
+      self.put("/services/v5/projects/#{project_settings.id}/stories/#{task['story_id']}/tasks/#{task['id']}?complete=#{!task['complete']}")
 
     end
 

@@ -79,13 +79,13 @@ module SwiftlyPivotal
     # @param number = 0 [int] Number of the tasks as a counter
     #
     # @return [void]
-    def self.tasks tasks, story, number = 0, finish = true
+    def self.tasks story, number = 0, finish = true
 
-      if !tasks.include? 'Sorry'
+      if !story['tasks'].empty?
 
         self.render_heading 'tasks', story
 
-        tasks.each do |task|
+        story['tasks'].each do |task|
 
           # If so, send task to get rendered to the screen
           self.render_hash({
@@ -102,7 +102,7 @@ module SwiftlyPivotal
         self.render_heading 'tasks', story
 
         # If so, send story to get rendered to the screen
-        self.render_hash(tasks, false)
+        self.render_hash(story['tasks'], false)
 
         if finish
           # abort
