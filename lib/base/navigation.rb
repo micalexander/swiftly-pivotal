@@ -185,7 +185,26 @@ module SwiftlyPivotal
           # Format the retieved items
           SwiftlyPivotal::Format.send items_name, [items[item_index]], item, 0, false
 
+        else
+
+          # Check to see if the answer is unschedule
+          if answer == 'c'
+
+            # If so suffix with a d
+            suffix = 'd'
+          else
+
+            # If not suffix with ed
+            suffix = 'ed'
+          end
+
+          # Return the updated story
+          item = SwiftlyPivotal::PivotalTracker.put_story item, "#{allowed_selections[:selected][answer]}#{suffix}".downcase
+
+          # Format the retieved items
+          SwiftlyPivotal::Format.send items_name, items, item, 0, false
         end
+
       end
     end
 
