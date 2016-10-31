@@ -49,6 +49,8 @@ module SwiftlyPivotal
 
       elsif !stories.include?('Sorry')
 
+        thor = Thor.new
+
         self.render_heading 'stories', state
 
         stories.each do |story|
@@ -59,12 +61,14 @@ module SwiftlyPivotal
             'ID'        => story['id'],
             'Name'      => story['name'],
             'Tasks'     => story['tasks'].length,
-            'Estimated' => story.include?('estimate') ? story['estimate'] : 'Not Estimated',
+            'Estimated' => story.include?('estimate') ? story['estimate'] : 'N',
             'Currently' => story['current_state'].capitalize,
             'Updated'   => Time.iso8601(story['updated_at']).strftime('%B %e,%l:%M %p'),
             'URL'       => story['url']
           })
         end
+
+        thor.say
       end
 
       if stories.include?('Sorry') && number != 0 || stories.length < 5
@@ -83,6 +87,8 @@ module SwiftlyPivotal
 
       if !story['tasks'].empty?
 
+        thor = Thor.new
+
         self.render_heading 'tasks', story
 
         story['tasks'].each do |task|
@@ -94,19 +100,18 @@ module SwiftlyPivotal
             'Description' => task['description'],
             'Complete'    => task['complete'],
             'Updated'     => Time.iso8601(task['updated_at']).strftime('%B %e,%l:%M %p'),
-          })
+          }, true, false)
         end
+
+        thor.say
 
       else
 
         self.render_heading 'tasks', story
 
         # If so, send story to get rendered to the screen
-        self.render_hash(story['tasks'], false)
+        self.render_hash(story['tasks'], false, false)
 
-        if finish
-          # abort
-        end
       end
     end
 
@@ -137,6 +142,7 @@ module SwiftlyPivotal
 
         # Let the user know the current status of stories we are looking at
         thor.say thor.set_color(meta_heading.rjust(meta_length), :blue )
+        thor.say
 
       when 'tasks'
 
@@ -146,23 +152,24 @@ module SwiftlyPivotal
         status_heading = "\s\s\s\s\e[4mStatus:\e[0m"
         id_heading     = "\s\s\s\s\e[4mId:\e[0m"
 
-        # Let the user know the current status of stories we are looking at
+        output = ''
+
+        name = self.reformat_wrapped meta['name'].capitalize
+
+        output << "\n\n\s\s\s\s("
+        output << thor.set_color(meta['url'].to_s, :blue)
+        output << ')-('
+        output << thor.set_color(meta['current_state'].capitalize, :yellow)
+        output << ")\n\n"
+        output << name
+
+        thor.say output
         thor.say
-        thor.say thor.set_color(sub_heading, :blue )
-        thor.say self.reformat_wrapped meta['name'].capitalize
-        thor.say
-        thor.say thor.set_color(status_heading, :blue )
-        thor.say self.reformat_wrapped meta['current_state'].capitalize
-        thor.say
-        thor.say thor.set_color(id_heading, :blue )
-        thor.say self.reformat_wrapped "##{meta['id'].to_s}"
-        thor.say
-        thor.say thor.set_color(tasks_heading, :blue )
 
       end
     end
 
-    def self.reformat_wrapped(s, width=35)
+    def self.reformat_wrapped(s, width=60)
 
       lines = []
       line  = ""
@@ -197,7 +204,7 @@ module SwiftlyPivotal
     # @param number = 0 [int] [description]
     #
     # @return [echo] Renders to the screen
-    def self.render_hash message, use_numbers = true
+    def self.render_hash message, use_numbers = true, story = true
 
       # Instantiate Thor
       thor = Thor.new
@@ -209,33 +216,42 @@ module SwiftlyPivotal
       # Output a spacer
       thor.say
 
-      # Loop though set of key, values of the hash
-      message.each do |k, v|
+      if story
+        output = ''
+        output << '('
+        output << thor.set_color(message['#'].to_s, :blue)
+        output << ')-('
+        output << thor.set_color(message['URL'], :blue)
+        output << ')-('
+        output << thor.set_color(message['Currently'], :yellow)
+        output << ")\n\s\s\s\s("
+        output << "Estimated #{message['Estimated']}"
+        output << ')-('
+        output << "Tasks #{message['Tasks']}"
+        output << ')-('
+        output << "Updated #{message['Updated']}"
+        output << ")\n\n\s\s\s\s"
+        output << message['Name']
 
-        # Check to see if the number has been displayed
-        if !numbered && use_numbers
+      elsif !message.empty?
 
-          # If not, set first line to blue and output it
-          thor.say thor.set_color("\t#{k.rjust(11)}#{v}", :blue )
+        status = message['Complete'] ? 'Is Completed' : 'Not Completed'
 
-          # Add an underline under the first line
-          underline = '--'
+        output = ''
+        output << "\s\s\s\s("
+        output << thor.set_color(message['#'].to_s, :blue)
+        output << ')-('
+        output << thor.set_color("ID ##{message['ID']}", :blue)
+        output << ')-('
+        output << thor.set_color(status, :yellow)
+        output << ")\n\s\s\s\s\s\s\s\s("
+        output << "Updated #{message['Updated']}"
+        output << ")\n\n\s\s\s\s\s\s\s\s"
+        output << message['Description']
 
-          # Set underline to blue and output it
-          thor.say thor.set_color("\t#{underline.rjust(12)}", :blue )
-        else
-
-          # If so then just output it normally
-          thor.say "\t#{k.rjust(10)}: #{v}"
-        end
-
-        # Set number to true to indicate that
-        # it has already been outputted
-        numbered = true
       end
 
-      # Output a spacer
-      thor.say
+      thor.say output
     end
 
     def self.render_no_more

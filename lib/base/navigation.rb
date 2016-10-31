@@ -277,7 +277,7 @@ module SwiftlyPivotal
       thor  = Thor.new
 
       # Create our separater for or instructions
-      instructions = self.dashed_line
+      instructions = "\n"+self.dashed_line
 
       # Loop through and space out the options
       allowed_selections[:selected].each_with_index do |(k,v),i|

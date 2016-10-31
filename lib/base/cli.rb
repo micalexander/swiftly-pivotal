@@ -11,6 +11,7 @@ require 'base/navigation'
 require 'base/stories'
 require 'base/tracker'
 require 'base/track'
+require 'readline'
 
 module SwiftlyPivotal
   class CLI < Thor
