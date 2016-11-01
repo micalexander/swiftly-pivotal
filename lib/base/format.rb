@@ -223,7 +223,7 @@ module SwiftlyPivotal
         output << ')-('
         output << thor.set_color(message['URL'], :blue)
         output << ')-('
-        output << thor.set_color(message['Currently'], :yellow)
+        output << color_status(message['Currently'])
         output << ")\n\s\s\s\s("
         output << "Estimated #{message['Estimated']}"
         output << ')-('
@@ -243,7 +243,7 @@ module SwiftlyPivotal
         output << ')-('
         output << thor.set_color("ID ##{message['ID']}", :blue)
         output << ')-('
-        output << thor.set_color(status, :yellow)
+        output << color_status(status)
         output << ")\n\s\s\s\s\s\s\s\s("
         output << "Updated #{message['Updated']}"
         output << ")\n\n\s\s\s\s\s\s\s\s"
@@ -252,6 +252,40 @@ module SwiftlyPivotal
       end
 
       thor.say output
+    end
+
+    def self.color_status status
+
+      thor = Thor.new
+
+      case status
+        when 'Accepted'
+
+          color = :green
+        when 'Delivered'
+
+          color = :yellow
+        when 'Finished'
+
+          color = :orange
+        when 'Started'
+
+          color = :blue
+        when 'Rejected'
+
+          color = :red
+        when 'Planned'
+
+          color = :white
+        when 'Unstarted'
+
+          color = :white
+        when 'Unscheduled'
+
+          color = :white
+      end
+
+      thor.set_color(status, color)
     end
 
     def self.render_no_more
