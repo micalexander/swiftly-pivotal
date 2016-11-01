@@ -197,7 +197,7 @@ module SwiftlyPivotal
 
           if answer == 's'
             # If answer is start
-            clip << "git branch #{item['story_type']}[##{item['id']}]"
+            clip << "git checkout -b #{item['story_type']}[##{item['id']}]"
 
           elsif ['a', 'd', 'f'].include?(answer)
 
