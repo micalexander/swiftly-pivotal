@@ -3,6 +3,7 @@ require 'fileutils'
 require 'awesome_print'
 require "time"
 require "clipboard"
+require 'curses'
 require 'base/version'
 require 'base/app_module'
 require 'base/pivotal'

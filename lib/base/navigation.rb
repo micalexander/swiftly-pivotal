@@ -20,7 +20,7 @@ module SwiftlyPivotal
     # @param loaded = 0 [int] A number specifying the amound of items previously loaded
     #
     # @return [void]
-    def self.navigate items_name, selected_name, items, state = '', loaded = 0
+    def self.navigate items_name, selected_name, items, state = ''
 
       # Set the initial allowed answers
       allowed_selections = {
@@ -39,7 +39,7 @@ module SwiftlyPivotal
       end
 
       # Display the items and return the item selected if one was made
-      selection = self.display_items allowed_selections, loaded, state, items_name, items
+      selection = self.display_items allowed_selections, state, items_name, items
 
       # Check to see if an item was selected
       if !selection.empty?
@@ -59,7 +59,7 @@ module SwiftlyPivotal
     # @param items [hash] Hash of items
     #
     # @return [hash] Hash of selected item
-    def self.display_items allowed_selections, loaded, state, items_name, items
+    def self.display_items allowed_selections, state, items_name, items
 
       # Ask a question as long as the answers to the question are allowed
       while answer = self.question(allowed_selections, "\n\nEnter a number to select a #{items_name}")
@@ -68,7 +68,7 @@ module SwiftlyPivotal
         Helpers.quit_app if answer == 'q'
 
         # Keep track of the items loaded while in this loop
-        loaded = loaded + items.length
+        loaded = allowed_selections[:fetched].last.to_i
 
         # Go out and get 5 more items
         fetched_items = SwiftlyPivotal::PivotalTracker.send items_name, loaded, state
@@ -83,7 +83,7 @@ module SwiftlyPivotal
           fetched_items.length.times do |number|
 
             # Add them to the allowed array
-            allowed_selections[:fetched] << loaded + (number+1)
+            allowed_selections[:fetched] << allowed_selections[:fetched].last.to_i+1
           end
 
         end

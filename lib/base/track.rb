@@ -2,6 +2,7 @@ module SwiftlyPivotal
   class Track < Thor
 
     include Helpers
+    include Curses
 
     def initialize(*args)
       super
@@ -30,8 +31,42 @@ module SwiftlyPivotal
     # @return [void]
 
     def accepted project_name
+Curses.init_screen
+Curses.curs_set(0)  # Invisible cursor
 
-      SwiftlyPivotal::Stories.get_stories 'accepted'
+
+begin
+
+  # Building a static window
+  win1 = Curses::Window.new(Curses.lines / 2 - 1, Curses.cols / 2 - 1, 0, 0)
+  # win1.box("o", "o")
+  win1.setpos(2, 2)
+  stories = SwiftlyPivotal::PivotalTracker.stories 0, 'accepted'
+  stories.each_with_index do |(k,v),i|
+
+
+    # win1.addstr stories[i]['name']
+    win1.addstr stories[i]['name']
+    row = []
+    col = []
+
+    # win1.addstr row.first
+
+
+    win1.setpos(2+(i*2), 2)
+    Curses.begy(5)
+    win1.refresh
+    sleep 0.05
+  end
+    win1.getch
+    win1.refresh
+
+
+rescue => ex
+  # Curses.close_screen
+end
+
+      # SwiftlyPivotal::Stories.get_stories 'accepted'
     end
 
     desc "delivered PROJECT_NAME", "Track delivered"
